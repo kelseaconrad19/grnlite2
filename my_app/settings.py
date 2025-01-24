@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["grnlite.onrender.com", "localhost"]
+ALLOWED_HOSTS = ["grnlite2.onrender.com", "localhost"]
 
 USE_TZ = True  # Ensure this is set
 
