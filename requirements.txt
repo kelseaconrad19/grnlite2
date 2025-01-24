@@ -81,7 +81,6 @@ mdurl==0.1.2
 mypy-extensions==1.0.0
 mysql==0.0.3
 mysql-connector-python==9.1.0
-mysqlclient==2.2.5
 nest-asyncio==1.6.0
 nodeenv==1.9.1
 numpy==2.0.1
