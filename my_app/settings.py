@@ -27,10 +27,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.getenv(
-    "DJANGO_ALLOWED_HOSTS",
-    "127.0.0.1,localhost,grnlite.onrender.com,.render.com,0.0.0.0,","grnlite2.vercel.app"
-).split(",")
+ALLOWED_HOSTS = ["grnlite.onrender.com", "localhost"]
 
 USE_TZ = True  # Ensure this is set
 
@@ -235,10 +232,10 @@ SOCIAL_AUTH_PIPELINE = (
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "grnlite-db"),
-        "USER": os.getenv("DB_USER", "kelseaconrad"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "Password123"),
-        "HOST": os.getenv("DB_HOST", "grnlite-db.c2rg4qi8kfso.us-east-1.rds.amazonaws.com"),
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
