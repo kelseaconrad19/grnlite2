@@ -9,3 +9,4 @@ Yes, the `.gitignore` file you provided looks correct. It will ignore the follow
 
 This should help keep your repository clean from environment-specific files and compiled Python files.
 .env
+.env
