@@ -1,0 +1,37 @@
+databases:
+  - name: my_appdb
+    plan: free
+    databaseName: grnlite_postgresql
+    user: my_app
+
+# Exported from Render on 2024-12-09T19:25:51Z
+services:
+- type: web
+  name: GRNLITE
+  runtime: python
+  repo: https://github.com/JSander72/GRNLITE
+  plan: free
+  envVars:
+  - key: DATABASE_URL
+    fromDatabase:
+      name: my_appdb
+      property: connectionString
+  - key: USER
+    sync: false
+  - key: PORT
+    sync: false
+  - key: PASSWORD
+    sync: false
+  - key: NAME
+    sync: false
+  - key: HOST
+    sync: false
+  - key: ENGINE
+    sync: false
+  region: ohio
+  buildCommand: pip install -r requirements.txt
+  startCommand: gunicorn grnlite.wsgi:application --bind 0.0.0.0:4000
+version: "1"
+
+
+

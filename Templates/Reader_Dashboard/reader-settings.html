@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grn Lite - Author Settings</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}">
+    <script>
+        // JavaScript to handle dark mode toggle
+        function toggleDarkMode() {
+            const body = document.body;
+            const darkModeStatus = document.getElementById('dark-mode-toggle');
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+            darkModeStatus.textContent = body.classList.contains('dark-mode') ? 'Disable Dark Mode' : 'Enable Dark Mode';
+        }
+
+        // JavaScript to save the settings
+        function saveSettings() {
+            const emailNotifications = document.getElementById('email-notifications').checked;
+            const profileVisibility = document.getElementById('profile-visibility').checked;
+            const manuscriptVisibility = document.getElementById('manuscript-visibility').checked;
+            const betaReaderSelection = document.getElementById('beta-reader-selection').checked;
+            const feedbackPreferences = document.querySelectorAll('input[name="feedback-preferences"]:checked');
+
+            let feedbackPreferencesArr = [];
+            feedbackPreferences.forEach((checkbox) => {
+                feedbackPreferencesArr.push(checkbox.value);
+            });
+
+            // Logic to save settings (send to backend typically)
+            alert(`Settings saved! Dark Mode: ${localStorage.getItem('darkMode')}, Email Notifications: ${emailNotifications}, Profile Visibility: ${profileVisibility}, Manuscript Visibility: ${manuscriptVisibility}, Beta Reader Selection: ${betaReaderSelection}, Feedback Preferences: ${feedbackPreferencesArr.join(', ')}`);
+        }
+
+        // On load, apply the saved settings
+        window.onload = function() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            document.getElementById('dark-mode-toggle').textContent = darkMode ? 'Disable Dark Mode' : 'Enable Dark Mode';
+            if (darkMode) document.body.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="{% static 'Front_End/Images/Grn_Lite_Logo.png' %}" alt="Grn Lite Logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'my_app:home' %}" class="nav-item">Home</a>
+                <a href="{% url 'my_app:reader-dashboard-html' %}" class="nav-item active">Dashboard</a>
+                <a href="{% url 'my_app:available-manuscripts-html' %}" class="nav-item">Available Manuscripts</a>
+                <a href="{% url 'my_app:reader-feedback-html' %}" class="nav-item">Feedback</a>
+                <a href="{% url 'my_app:reader-profile-html' %}" class="nav-item">Profile</a>
+                <a href="{% url 'my_app:reader-resource-library-html' %}" class="nav-item">Resource Library</a>
+                <a href="{% url 'my_app:beta-reader-training-html' %}" class="nav-item">Training Module</a>
+                <a href="{% url 'my_app:beta-reader-performance-metrics-html' %}" class="nav-item active">Performance Metrics</a>
+                <a href="{% url 'my_app:reader-payment-page-html' %}" class="nav-item">Payments</a>
+                <a href="{% url 'my_app:reader-settings-html' %}" class="nav-item">Settings</a>
+                <a href="{% url 'my_app:logout' %}" class="nav-item">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Author Settings</h1>
+                <p>Manage your account settings and preferences here.</p>
+            </div>
+
+            <!-- Settings Form -->
+            <form class="settings-form">
+                <!-- Dark Mode Toggle -->
+                <div class="form-group">
+                    <label for="dark-mode-toggle">Dark Mode:</label>
+                    <button type="button" id="dark-mode-toggle" onclick="toggleDarkMode()">Enable Dark Mode</button>
+                </div>
+
+                <!-- Email Notifications -->
+                <div class="form-group">
+                    <label for="email-notifications">Receive Email Notifications:</label>
+                    <input type="checkbox" id="email-notifications">
+                </div>
+                
+                <!-- Privacy Settings -->
+                <section class="form-section">
+                  <h3>Privacy Settings</h3>
+                  <div class="form-group">
+                      <label for="profile-visibility">Profile Visibility:</label>
+                      <select id="profile-visibility" name="profile-visibility">
+                          <option value="public">Public</option>
+                          <option value="private">Private</option>
+                      </select>
+                  </div>
+              </section>
+
+              <!-- Reading Preferences -->
+              <section class="form-section">
+                  <h3>Reading Preferences</h3>
+                  <div class="form-group">
+                      <label for="favorite-genres">Favorite Genres:</label>
+                      <input type="text" id="favorite-genres" name="favorite-genres" placeholder="Enter your favorite genres">
+                  </div>
+              </section>
+
+
+
+
+               
+                <!-- Social Media Links -->
+                <div class="form-group">
+                    <label for="facebook-link">Facebook Profile:</label>
+                    <input type="url" id="facebook-link" name="facebookLink" placeholder="Enter your Facebook URL">
+                </div>
+                <div class="form-group">
+                    <label for="x-link">X Profile:</label>
+                    <input type="url" id="x-link" name="XLink" placeholder="Enter your X URL">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin-link">LinkedIn Profile:</label>
+                    <input type="url" id="linkedin-link" name="linkedinLink" placeholder="Enter your LinkedIn URL">
+                </div>
+
+                <!-- Password Change -->
+                <div class="form-group">
+                    <label for="password">Change Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm new password">
+                </div>
+
+                <!-- Account Deletion -->
+                <div class="form-group">
+                    <label for="delete-account">Delete Account:</label>
+                    <input type="checkbox" id="delete-account" name="delete-account">
+                    <span style="color: red;">This will permanently delete your account.</span>
+                </div>
+
+                <!-- Save Settings Button -->
+                <button type="button" class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

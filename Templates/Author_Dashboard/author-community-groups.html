@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Author Community Groups</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// JavaScript to handle creating new groups
+			function createGroup() {
+				const groupName = document.getElementById("group-name").value.trim();
+				const groupDescription = document
+					.getElementById("group-description")
+					.value.trim();
+				const groupList = document.getElementById("community-groups-list");
+
+				if (groupName && groupDescription) {
+					const newGroup = document.createElement("div");
+					newGroup.classList.add("community-groups-card");
+					newGroup.innerHTML = `
+                    <h3>${groupName}</h3>
+                    <p>${groupDescription}</p>
+                    <button onclick="joinGroup('${groupName}')">Join Group</button>
+                `;
+					groupList.appendChild(newGroup);
+					alert("New group created successfully!");
+					document.getElementById("group-name").value = "";
+					document.getElementById("group-description").value = "";
+				} else {
+					alert("Please provide both a group name and description!");
+				}
+			}
+
+			// Function to join a group
+			function joinGroup(groupName) {
+				alert(`You have joined the group: ${groupName}`);
+			}
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Author Community Groups</h1>
+					<p>Join or create groups to connect with fellow authors.</p>
+				</div>
+
+				<!-- Existing Groups List -->
+				<div class="community-groups-container">
+					<h3>Available Community Groups</h3>
+					<div id="community-groups-list">
+						<div class="community-groups-card">
+							<h3>Science Fiction Authors</h3>
+							<p>A group for authors working in the science fiction genre.</p>
+							<button onclick="joinGroup('Science Fiction Authors')">
+								Join Group
+							</button>
+						</div>
+						<div class="community-groups-card">
+							<h3>Self-Publishing Success</h3>
+							<p>
+								A group for authors looking to share and learn about
+								self-publishing strategies.
+							</p>
+							<button onclick="joinGroup('Self-Publishing Success')">
+								Join Group
+							</button>
+						</div>
+					</div>
+
+					<!-- Create New Group Section -->
+					<div class="create-group-section">
+						<h4>Create a New Group</h4>
+						<div class="form-group">
+							<label for="group-name">Group Name:</label>
+							<input
+								type="text"
+								id="group-name"
+								placeholder="Enter group name"
+							/>
+						</div>
+						<div class="form-group">
+							<label for="group-description">Group Description:</label>
+							<textarea
+								id="group-description"
+								placeholder="Describe your group"
+							></textarea>
+						</div>
+						<button type="button" onclick="createGroup()">Create Group</button>
+					</div>
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

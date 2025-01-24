@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grn Lite - Sign Up</title>
+    <link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}">
+    <style>
+        /* Inline styles for demonstration */
+        nav {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-align: left;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        nav .brand-logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        nav .brand-logo:hover {
+            text-decoration: none;
+        }
+        /* Container styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #id_username {
+            margin-bottom: 10px !important;
+        }
+
+        body nav {
+            width: 100%;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+
+        body h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 20px 0 !important;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin: 10px 0 !important;
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            outline: none;
+            bo
+        }
+
+        input:focus, select:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        /* Button styling */
+        button {
+            background-color: #4caf50 !important;
+            color: white;
+            font-size: 1rem;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Error messages */
+        .error-messages {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: -10px;
+        }
+
+        /* Role selection dropdown */
+        select {
+            cursor: pointer;
+        }
+
+        /* Footer text */
+        .footer-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .footer-text a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<nav>
+    <a href="/">Home</a>
+</nav>
+<h1>Register a New User</h1>
+<form class="form-with-validation" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Automatically renders all form fields -->
+    <button type="submit">Register</button>
+</form>
+</body>
+
+</html>

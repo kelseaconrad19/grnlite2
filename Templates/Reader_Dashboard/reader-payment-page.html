@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grn Lite - Reader Payment System</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const paymentForm = document.getElementById("payment-form");
+
+            paymentForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const authorId = document.getElementById("author-id").value;
+                const paymentAmount = document.getElementById("payment-amount").value.trim();
+
+                if (!authorId || !paymentAmount) {
+                    alert("Please fill out all fields before submitting.");
+                    return;
+                }
+
+                const paymentData = {
+                    authorId,
+                    paymentAmount,
+                    status: "Pending",
+                    transactionId: `TXN-${Math.floor(Math.random() * 1000000)}`
+                };
+
+                // Mock API call to process payment
+                setTimeout(() => {
+                    alert(`Payment of $${paymentAmount} from Author (ID: ${authorId}) has been processed successfully!`);
+                    paymentForm.reset();
+                }, 1000);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="{% static 'Front_End/Images/Grn_Lite_Logo.png' %}" alt="Grn Lite Logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'my_app:home' %}" class="nav-item">Home</a>
+                <a href="{% url 'my_app:reader-dashboard-html' %}" class="nav-item active">Dashboard</a>
+                <a href="{% url 'my_app:available-manuscripts-html' %}" class="nav-item">Available Manuscripts</a>
+                <a href="{% url 'my_app:reader-feedback-html' %}" class="nav-item">Feedback</a>
+                <a href="{% url 'my_app:reader-profile-html' %}" class="nav-item">Profile</a>
+                <a href="{% url 'my_app:reader-resource-library-html' %}" class="nav-item">Resource Library</a>
+                <a href="{% url 'my_app:beta-reader-training-html' %}" class="nav-item">Training Module</a>
+                <a href="{% url 'my_app:beta-reader-performance-metrics-html' %}" class="nav-item active">Performance Metrics</a>
+                <a href="{% url 'my_app:reader-payment-page-html' %}" class="nav-item">Payments</a>
+                <a href="{% url 'my_app:reader-settings-html' %}" class="nav-item">Settings</a>
+                <a href="{% url 'my_app:logout' %}" class="nav-item">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Reader Payment System</h1>
+                <p>Manage payments from authors for completed feedback work.</p>
+            </div>
+
+            <!-- Payment Form -->
+            <form id="payment-form" class="form-group">
+                <div class="form-group">
+                    <label for="author-id">Author ID:</label>
+                    <input type="text" id="author-id" name="author-id" placeholder="Enter Author ID" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment-amount">Amount to Receive:</label>
+                    <input type="number" id="payment-amount" name="payment-amount" placeholder="Enter Payment Amount" min="0" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Receive Payment</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

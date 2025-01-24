@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Beta Reader List</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// JavaScript to handle beta reader filtering and selection
+			let betaReaders = [
+				{
+					id: 1,
+					name: "Reader 1",
+					genre: "Fiction",
+					rating: 5,
+					experience: "Expert",
+					description: "Plot: Well-structured, Characters: Relatable",
+				},
+				{
+					id: 2,
+					name: "Reader 2",
+					genre: "Mystery",
+					rating: 4,
+					experience: "Intermediate",
+					description: "Pacing: Good, Characters: Compelling",
+				},
+				{
+					id: 3,
+					name: "Reader 3",
+					genre: "Sci-Fi",
+					rating: 5,
+					experience: "Expert",
+					description: "Plot: Intriguing, Characters: Complex",
+				},
+				{
+					id: 4,
+					name: "Reader 4",
+					genre: "Fantasy",
+					rating: 4,
+					experience: "Beginner",
+					description: "Pacing: Excellent, Worldbuilding: Strong",
+				},
+			];
+
+			let filteredReaders = [...BetaReaders];
+
+			// Function to filter the beta reader list based on the selected filters
+			function applyFilters() {
+				const genreFilter = document.getElementById("genre-filter").value;
+				const ratingFilter = document.getElementById("rating-filter").value;
+				const experienceFilter =
+					document.getElementById("experience-filter").value;
+
+				filteredReaders = betaReaders.filter((reader) => {
+					return (
+						(genreFilter ? reader.genre === genreFilter : true) &&
+						(ratingFilter ? reader.rating >= ratingFilter : true) &&
+						(experienceFilter ? reader.experience === experienceFilter : true)
+					);
+				});
+
+				renderReaders();
+			}
+
+			// Function to render the filtered list of readers
+			function renderReaders() {
+				const readerListContainer = document.getElementById("beta-reader-list");
+				readerListContainer.innerHTML = ""; // Clear the list before rendering
+
+				filteredReaders.forEach((reader) => {
+					const readerCard = document.createElement("div");
+					readerCard.classList.add("reader-card");
+					readerCard.innerHTML = `
+                    <h4>${reader.name}</h4>
+                    <p><strong>Genre:</strong> ${reader.genre}</p>
+                    <p><strong>Rating:</strong> ${reader.rating} Stars</p>
+                    <p><strong>Experience:</strong> ${reader.experience}</p>
+                    <p><strong>Description:</strong> ${reader.description}</p>
+                    <button class="btn btn-secondary" onclick="selectReader(${reader.id})">Select Reader</button>
+                `;
+					readerListContainer.appendChild(readerCard);
+				});
+			}
+
+			// Function to handle the selection of a beta reader
+			function selectReader(readerId) {
+				const selectedReader = betaReaders.find(
+					(reader) => reader.id === readerId
+				);
+				alert(
+					`You selected ${selectedReader.name} with ${selectedReader.rating} stars rating.`
+				);
+			}
+
+			// Initialize the page with the full list of readers
+			window.onload = renderReaders;
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Find Beta Readers</h1>
+					<p>Filter and choose beta readers for your manuscript.</p>
+				</div>
+
+				<div class="filter-section">
+					<h3>Filter Beta Readers</h3>
+					<div class="form-group">
+						<label for="genre-filter">Genre:</label>
+						<select id="genre-filter">
+							<option value="">All Genres</option>
+							<option value="Fiction">Fiction</option>
+							<option value="Mystery">Mystery</option>
+							<option value="Sci-Fi">Sci-Fi</option>
+							<option value="Fantasy">Fantasy</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="rating-filter">Minimum Rating:</label>
+						<select id="rating-filter">
+							<option value="">Any Rating</option>
+							<option value="4">4 Stars & Up</option>
+							<option value="5">5 Stars Only</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="experience-filter">Experience Level:</label>
+						<select id="experience-filter">
+							<option value="">Any Experience</option>
+							<option value="Beginner">Beginner</option>
+							<option value="Intermediate">Intermediate</option>
+							<option value="Expert">Expert</option>
+						</select>
+					</div>
+
+					<button
+						type="button"
+						class="btn btn-primary"
+						onclick="applyFilters()"
+					>
+						Apply Filters
+					</button>
+				</div>
+
+				<!-- Beta Reader List Section -->
+				<div class="beta-reader-list" id="beta-reader-list">
+					<!-- Beta readers will be dynamically listed here -->
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

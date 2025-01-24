@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - My Books</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<style>
+			/* Dashboard Container */
+.dashboard-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+/* Main Content */
+.main-content {
+	flex: 1;
+	padding: 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+	background-color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+.manuscript-information h3 {
+	font-size: 1rem;
+	font-weight: 700 !important;
+}
+/* Header */
+.content-header h1 {
+	font-size: 2.7rem !important;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.content-header p {
+	font-size: 1.1rem;
+	text-align: center;
+	color: #7f8c8d;
+	margin-bottom: 30px;
+}
+
+/* Book List */
+.books-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 20px;
+	padding: 20px 0;
+}
+
+.cover-art {
+	display: flex;
+	justify-content: center;
+}
+/* Book Card */
+.book-card {
+	background-color: #ffffff;
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid #eaeaea;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	padding: 1rem;
+}
+
+.book-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.book-card img {
+	width: 70%;
+	height: auto;
+	object-fit: fill;
+}
+
+.book-info {
+	padding: 15px 20px;
+}
+
+.book-info h3 {
+	font-size: 1.2rem;
+	color: #34495e;
+	margin-bottom: 8px;
+	font-weight: 700;
+}
+
+.book-info p {
+	font-size: 0.95rem;
+	color: #555;
+	margin-bottom: 12px;
+}
+
+.book-info .manuscript-information {
+	font-weight: 500;
+	color: #2c3e50;
+}
+
+#title {
+	font-weight: 700;
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+	display: inline-block;
+	padding: 10px 16px;
+	border-radius: 8px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	margin: 8px 5px 0 0;
+}
+
+.btn-primary {
+	background-color: #4caf50 !important;
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: #2980b9;
+}
+
+.btn-danger {
+	background-color: #e74c3c;
+	color: white;
+}
+
+.btn-danger:hover {
+	background-color: #c0392b;
+}
+
+.btn-download {
+	background-color: #3498db !important;
+	color: white;
+}
+
+.btn-download:hover {
+	background-color: #27ae60;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.books-container {
+			grid-template-columns: 1fr;
+	}
+
+	.book-card img {
+			height: 150px;
+	}
+
+	.book-info {
+			padding: 10px 15px;
+	}
+}
+		</style>
+		<script>
+			// JavaScript to handle adding new books to the list
+			function addBook() {
+				const bookTitle = document.getElementById("book-title").value;
+				const bookDescription =
+					document.getElementById("book-description").value;
+				const bookCover = document.getElementById("book-cover").files[0];
+				const bookLink = document.getElementById("book-link").value; // Get book link input
+
+				if (bookTitle && bookDescription && bookCover) {
+					const bookList = document.getElementById("book-list");
+					const newBook = document.createElement("div");
+					newBook.classList.add("book-item");
+					newBook.innerHTML = `
+                    <h4>${bookTitle}</h4>
+                    <p>${bookDescription}</p>
+                    <img src="${URL.createObjectURL(
+											bookCover,
+										)}" alt="Book Cover" class="book-cover">
+                    <p><a href="${bookLink}" target="_blank">View Book</a></p> <!-- Book link -->
+                    <button class="btn btn-danger" onclick="removeBook(this)">Remove</button>
+                `;
+					bookList.appendChild(newBook);
+					// Clear the form fields
+					document.getElementById("book-title").value = "";
+					document.getElementById("book-description").value = "";
+					document.getElementById("book-cover").value = ""; // Reset the file input
+					document.getElementById("book-link").value = ""; // Reset the book link input
+				} else {
+					alert("Please fill out all fields before adding a book.");
+				}
+			}
+
+			// JavaScript to remove a book from the list
+			function removeBook(button) {
+				button.parentElement.remove();
+			}
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1 class="book-list-h1" >My Books</h1>
+					<p>
+						Manage your books, view past submissions, and keep track of your
+						projects.
+					</p>
+				</div>
+
+				<!-- We don't need this section because this will be the manuscript-submission page -->
+				<!-- Add New Book Section -->
+				{% comment %}
+				<div class="add-book-section">
+					<h3>Add New Book</h3>
+					<form id="add-book-form" class="form-group">
+						<div class="form-group">
+							<label for="book-title">Book Title:</label>
+							<input
+								type="text"
+								id="book-title"
+								name="book-title"
+								placeholder="Enter your book title"
+								required
+							/>
+						</div>
+						<div class="form-group">
+							<label for="book-description">Book Description:</label>
+							<textarea
+								id="book-description"
+								name="book-description"
+								placeholder="Enter book description"
+								required
+							></textarea>
+						</div>
+						<div class="form-group">
+							<label for="book-cover">Upload Book Cover:</label>
+							<input
+								type="file"
+								id="book-cover"
+								name="book-cover"
+								accept="image/*"
+								required
+							/>
+						</div>
+						<!-- New field to add a book link -->
+						<div class="form-group">
+							<label for="book-link">Book Link (Optional):</label>
+							<input
+								type="url"
+								id="book-link"
+								name="book-link"
+								placeholder="Enter link to your book (e.g., Amazon, Website)"
+							/>
+						</div>
+						<button type="button" class="btn btn-primary" onclick="addBook()">
+							Add Book
+						</button>
+					</form>
+				</div>
+				{% endcomment %}
+
+				<!-- Book List Section -->
+				<div id="book-list" class="">
+            <div class="books-container book-list">
+                {% for manuscript in manuscripts %}
+									<div class="book-card">
+										<div class="book-info">
+												<h3 id="title" class="manuscript-information">{{ manuscript.title }}</h3>
+												<h3>Keywords: </h3>
+												<p class="manuscript-information">{{ manuscript.keywords.all|join:", " }}</p>
+										</div>
+										<div class="cover-art">
+                    {% if manuscript.cover_art %}
+                        <img src="{{ manuscript.cover_art.url }}" alt="{{ manuscript.title }} Cover Art">
+                    {% endif %}
+									</div>
+										<a href="{% url 'my_app:view-project' manuscript.id %}" class="btn btn-primary" style="font-size: 1rem;">View Book</a>
+										<a href="{{ manuscript.file_path.url }}" class="btn" style="background-color: #3498db; font-size: 1rem;" download>Download Book</a>
+                        <form action="{% url 'my_app:delete-manuscript' manuscript.id %}" method="post" style="display: inline;">
+													{% csrf_token %}
+													<button type="submit" class="btn" style="background-color: red; color: white; padding: 10px 15px; font-size: 1rem;">Delete Book</button>
+											</form>
+                    </div>
+                {% empty %}
+                    <p>You haven't uploaded any manuscripts yet.</p>
+                {% endfor %}
+            </div>
+			</main>
+		</div>
+	</body>
+</html>

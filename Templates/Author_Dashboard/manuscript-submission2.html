@@ -1,0 +1,175 @@
+<!-- prettier-ignore -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Create Manuscript</title>
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+		<script>
+			$(document).ready(function() {
+					$('#id_keywords, #id_feedback_topics').select2({
+							placeholder: "Select options",
+							allowClear: true,
+					});
+					$('#id_keywords').select2({
+						placeholder: "Select relevant keywords",
+						allowClear: true,
+						tags: true, // Enable users to add new tags dynamically
+						maximumSelectionLength: 5, // Limit to 5 selections
+				});
+				
+				$('#id_feedback_topics').select2({
+						placeholder: "Select feedback topics",
+						allowClear: true,
+						tags: false, // Enable users to add new tags dynamically
+						maximumSelectionLength: 5, // Limit to 5 selections
+				});
+			});
+			
+	</script>
+	<style>
+		.form-check {
+			display: flex;
+			flex-direction: column; /* Align checkbox and label horizontally */
+			align-items: center; /* Align checkbox and label vertically */
+			gap: 0px; /* Add space between checkbox and label */
+		}
+		
+		.form-check-input {
+				margin: 0; /* Remove default margins */
+				vertical-align: middle; /* Ensure proper vertical alignment */
+				border: 1px solid rgb(45, 204, 20) !important; /* Add border to checkbox */
+		}
+		
+		.form-check label {
+				margin: 0; /* Ensure no unwanted margins on the label */
+				vertical-align: middle; /* Ensure proper vertical alignment */
+				font-size: 1.4rem;
+		}
+	</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<div class="main-content">
+				<div class="content-header">
+					<h1>Create a New Manuscript</h1>
+				</div>
+
+				<form method="post" enctype="multipart/form-data" class="profile-form">
+					{% csrf_token %}
+
+					<!-- Title -->
+					<div class="form-group">
+						{{ form.title.label_tag }} {{ form.title }} 
+						{% for error in form.title.errors %}
+						<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+					</div>
+
+					<!-- File Path -->
+					<div class="form-group">
+						{{ form.file_path.label_tag }} {{ form.file_path }} 
+						{% if form.file_path.help_text %}
+						<small class="form-text">{{ form.file_path.help_text }}</small>
+						{% endif %} {% for error in form.file_path.errors %}
+						<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+					</div>
+
+					<!-- Keywords Field -->
+					<div class="form-group">
+						{{ form.keywords.label_tag }}
+						{{ form.keywords }}
+						{% if form.keywords.help_text %}
+							<small class="form-text">{{ form.keywords.help_text }}</small>
+						{% endif %}
+						{% for error in form.keywords.errors %}
+							<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+					</div>
+
+					<!-- Feedback Topics Field -->
+					<div class="form-group">
+						{{ form.feedback_topics.label_tag }}
+						{{ form.feedback_topics }}
+						{% if form.feedback_topics.help_text %}
+							<small class="form-text">{{ form.feedback_topics.help_text }}</small>
+						{% endif %}
+						{% for error in form.feedback_topics.errors %}
+							<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+					</div>
+
+					<!-- Beta Readers Needed -->
+					<div class="form-group">
+						{{ form.beta_readers_needed.label_tag }}
+						{{ form.beta_readers_needed }}
+						{% for error in form.beta_readers_needed.errors %}
+								<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+				</div>
+
+				<!-- Cover Art -->
+				<div class="form-group">
+						{{ form.cover_art.label_tag }}
+						{{ form.cover_art }}
+						{% if form.cover_art.help_text %}
+								<small class="form-text">{{ form.cover_art.help_text }}</small>
+						{% endif %}
+						{% for error in form.cover_art.errors %}
+								<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+				</div>
+
+				<!-- NDA Required -->
+				<!-- NDA Required -->
+				<div class="form-group form-check">
+					{{ form.nda_required.label_tag }}
+					{{ form.nda_required }}
+					{% if form.nda_required.help_text %}
+							<small class="form-text">{{ form.nda_required.help_text }}</small>
+					{% endif %}
+					{% for error in form.nda_required.errors %}
+							<small class="text-danger">{{ error }}</small>
+					{% endfor %}
+				</div>
+
+				<!-- NDA File -->
+				<div class="form-group">
+					{{ form.nda_file.label_tag }}
+					{{ form.nda_file }}
+						{% if form.nda_file.help_text %}
+								<small class="form-text">{{ form.nda_file.help_text }}</small>
+						{% endif %}
+						{% for error in form.nda_file.errors %}
+								<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+				</div>
+
+				<!-- Plot Summary -->
+				<div class="form-group">
+						{{ form.plot_summary.label_tag }}
+						{{ form.plot_summary }}
+						{% if form.plot_summary.help_text %}
+								<small class="form-text">{{ form.plot_summary.help_text }}</small>
+						{% endif %}
+						{% for error in form.plot_summary.errors %}
+								<small class="text-danger">{{ error }}</small>
+						{% endfor %}
+				</div>
+
+					<!-- Submit Button -->
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary" style="background-color: #3498db;">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

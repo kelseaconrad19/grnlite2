@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grn Lite - Beta Reader Performance Metrics</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}">
+    <script>
+        // Mock data for performance metrics
+        document.addEventListener("DOMContentLoaded", () => {
+            const performanceData = [
+                { name: "Reader 1", feedbackCount: 12, averageRating: 4.5, projectsCompleted: 8 },
+                { name: "Reader 2", feedbackCount: 20, averageRating: 4.2, projectsCompleted: 15 },
+                { name: "Reader 3", feedbackCount: 8, averageRating: 4.8, projectsCompleted: 5 }
+            ];
+
+            const performanceList = document.getElementById("performance-list");
+
+            performanceData.forEach((reader) => {
+                const listItem = document.createElement("div");
+                listItem.classList.add("performance-item");
+                listItem.innerHTML = `
+                    <h4>${reader.name}</h4>
+                    <p><strong>Feedback Count:</strong> ${reader.feedbackCount}</p>
+                    <p><strong>Average Rating:</strong> ${reader.averageRating} / 5</p>
+                    <p><strong>Projects Completed:</strong> ${reader.projectsCompleted}</p>
+                `;
+                performanceList.appendChild(listItem);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="{% static 'Front_End/Images/Grn_Lite_Logo.png' %}" alt="Grn Lite Logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'my_app:home' %}" class="nav-item">Home</a>
+                <a href="{% url 'my_app:reader-dashboard-html' %}" class="nav-item active">Dashboard</a>
+                <a href="{% url 'my_app:available-manuscripts-html' %}" class="nav-item">Available Manuscripts</a>
+                <a href="{% url 'my_app:reader-feedback-html' %}" class="nav-item">Feedback</a>
+                <a href="{% url 'my_app:reader-profile-html' %}" class="nav-item">Profile</a>
+                <a href="{% url 'my_app:reader-resource-library-html' %}" class="nav-item">Resource Library</a>
+                <a href="{% url 'my_app:beta-reader-training-html' %}" class="nav-item">Training Module</a>
+                <a href="{% url 'my_app:beta-reader-performance-metrics-html' %}" class="nav-item active">Performance Metrics</a>
+                <a href="{% url 'my_app:reader-payment-page-html' %}" class="nav-item">Payments</a>
+                <a href="{% url 'my_app:reader-settings-html' %}" class="nav-item">Settings</a>
+                <a href="{% url 'my_app:logout' %}" class="nav-item">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Beta Reader Performance Metrics</h1>
+                <p>View key metrics to help authors choose the best beta readers for their projects.</p>
+            </div>
+
+            <!-- Performance Metrics List -->
+            <div id="performance-list" class="performance-list">
+                <h3>Top Performing Beta Readers</h3>
+                <!-- Performance data will be dynamically added here -->
+            </div>
+        </main>
+    </div>
+</body>
+</html>

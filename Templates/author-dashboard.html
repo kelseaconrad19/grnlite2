@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Author Dashboard</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// JavaScript to dynamically add notifications
+			{% comment %} document.addEventListener("DOMContentLoaded", () => {
+				function("{{% url 'my_app:notifications' %}}").then((response) => response.json()).then((data) => {
+					const notifications = data.notifications;
+					const notificationsList = document.getElementById("notifications-list");
+					notifications.forEach((notification) => {
+						const li = document.createElement("li");
+						li.textContent = notification.message;
+						notificationsList.appendChild(li);
+					});
+				}); {% endcomment %}
+			document.addEventListener("DOMContentLoaded", function () {
+				// Function to fetch and update the Active Titles tile
+				function updateActiveTitles() {
+					fetch("{% url 'my_app:active-titles' %}")
+						.then((response) => response.json())
+						.then((data) => {
+							// Update the tile with the fetched count
+							const activeTitlesElement = document.getElementById(
+								"active-titles-count",
+							);
+							activeTitlesElement.textContent = `${data.draft_count} manuscript(s) in draft status`;
+						})
+						.catch((error) => {
+							console.error("Error fetching Active Titles count:", error);
+						});
+				}
+
+				// Call the function to update the tile
+				updateActiveTitles();
+			});
+			fetch("/api/completed-reviews/")
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((data) => {
+        const reviewsCountElement = document.getElementById("completed-reviews-count");
+        reviewsCountElement.textContent = `${data.completed_reviews_count} reviews completed`;
+    })
+    .catch((error) => {
+        console.error("Error fetching completed reviews count:", error);
+        const reviewsCountElement = document.getElementById("completed-reviews-count");
+        reviewsCountElement.textContent = "Error loading reviews count";
+    });
+		document.addEventListener("DOMContentLoaded", function() {
+			fetch("/api/feedback-count/")
+					.then(response => response.json())
+					.then(data => {
+							if (data.feedback_count !== undefined) {
+									document.getElementById("feedback-count-value").textContent = data.feedback_count;
+							} else {
+									document.getElementById("feedback-count-value").textContent = "Error";
+							}
+					})
+					.catch(error => {
+							console.error("Error fetching feedback count:", error);
+							document.getElementById("feedback-count-value").textContent = "Error";
+					});
+	});
+		</script>
+		<style>
+			.dashboard-container {
+				display: flex;
+				flex-direction: row;
+				height: 100vh;
+			}
+
+			.main-content {
+				flex: 1;
+				padding: 20px;
+			}
+
+			.content-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 20px;
+			}
+
+			.content-header h1 {
+				font-size: 2.8rem !important;
+				color: #2c3e50;
+			}
+
+			.dashboard-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr !important;
+				grid-auto-rows: 400px !important;
+				gap: 20px;
+			}
+
+			.dashboard-grid .card {
+				display: flex; /* Enables flexbox on the card */
+				flex-direction: column; /* Ensures the content stacks vertically */
+				justify-content: center; /* Centers content vertically */
+				align-items: center; /* Centers content horizontally */
+				text-align: center; /* Centers text inside the card */
+				border: 1px solid #ddd;
+				border-radius: 10px;
+				background-color: #fefefe;
+				padding: 15px;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+				height: 100%; /* Ensures the card takes the full height of its container */
+		}
+
+			.card {
+				border: 2px solid #4caf50 !important;
+				border-radius: 10px;
+				background-color: #fefefe;
+				padding: 15px;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			.card:hover {
+				box-shadow: 0 4px 8px #000000;
+				transform: translateY(-5px);
+			}
+
+			.card h3 {
+				font-size: 2.2rem !important;
+				color: #2c3e50;
+				margin-bottom: 10px;
+			}
+
+			.card p {
+				font-size: 1.5rem !important;
+				color: #333;
+				margin: 20px 0 !important;
+			}
+
+			.card button {
+				background-color: #4CAF50;
+				color: white;
+				border: none;
+				border-radius: 5px !important;
+				padding: 10px 20px !important;
+				font-size: 1.3rem !important;
+				cursor: pointer;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			.card button:hover {
+				background-color:rgb(66, 150, 69);
+			}
+			.content-header button {
+				background-color: #4CAF50 !important;
+				color: white;
+				border: none;
+				border-radius: 5px !important;
+				padding: 10px 20px !important;
+				font-size: 1.3rem !important;
+				cursor: pointer;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+			}
+
+			.content-header button:hover {
+				background-color:rgb(66, 150, 69) !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Welcome Back, {{ user.first_name|default:user.username }}!</h1>
+					<button class="btn btn-primary">
+						<a
+							href="{% url 'my_app:manuscript-submission-html' %}"
+							style="color: white; text-decoration: none"
+							>Add New Title</a
+						>
+					</button>
+				</div>
+				<!-- Dashboard Cards -->
+				<div class="dashboard-grid">
+					<!-- Existing Cards -->
+					<div class="card">
+						<h3>Active Titles</h3>
+						<p id="active-titles-count">Loading...</p>
+						<button class="btn btn-secondary">
+							<a
+								href="{% url 'my_app:my-books-html' %}"
+								style="color: white; text-decoration: none"
+								>View Books</a
+							>
+						</button>
+					</div>
+					<div class="card">
+						<h3>Completed Reviews</h3>
+						<div id="feedback-count">
+							<p>You have <span id="feedback-count-value">Loading...</span> responses waiting.</p>
+					</div>
+						<button class="btn btn-secondary">
+							<a
+								href="{% url 'my_app:author-feedback' %}"
+								style="color: white; text-decoration: none"
+								>View Feedback</a
+							>
+						</button>
+					</div>
+					<div class="card">
+						<h3>Find Beta Readers</h3>
+						<p>View and hire beta readers for your projects.</p>
+						<button class="btn btn-secondary">
+							<a
+								href="{% url 'my_app:find-beta-readers-html' %}"
+								style="color: white; text-decoration: none"
+								>Find Beta Readers</a
+							>
+						</button>
+					</div>
+					<!-- New Cards -->
+					<div class="card">
+						<h3>Manuscript Submission</h3>
+						<p>Submit and manage your manuscripts here.</p>
+						<button class="btn btn-secondary">
+							<a
+								href="{% url 'my_app:manuscript-submission-html' %}"
+								style="color: white; text-decoration: none"
+								>Add New Title</a
+							>
+						</button>
+					</div>
+				</div>
+			</main>
+		</div>
+		<!-- <script src="{% static 'redirectToAuthPage.js' %}"></script> -->
+	</body>
+</html>

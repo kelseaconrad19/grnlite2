@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grn Lite - Beta Reader Profile</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}">
+    <script>
+     function saveProfile() {
+    const name = document.getElementById("reader-name").value.trim();
+    const bio = document.getElementById("reader-bio").value.trim();
+    const portfolio = document.getElementById("portfolio-feedback").value.trim();
+    const payRate = document.getElementById("pay-rate").value.trim();
+
+    if (!name || !bio || !portfolio || !payRate) {
+        alert("Please fill out all fields!");
+        return;
+    }
+
+    document.getElementById("display-name").innerText = name;
+    document.getElementById("display-bio").innerText = bio;
+    document.getElementById("display-portfolio").innerText = portfolio;
+    document.getElementById("display-pay-rate").innerText = payRate;
+
+    document.getElementById("profile-form").classList.add("hidden");
+    document.getElementById("profile-display").classList.remove("hidden");
+}
+
+function editProfile() {
+    document.getElementById("profile-form").classList.remove("hidden");
+    document.getElementById("profile-display").classList.add("hidden");
+} 
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="{% static 'Front_End/Images/Grn_Lite_Logo.png' %}" alt="Grn Lite Logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'my_app:home' %}" class="nav-item">Home</a>
+                <a href="{% url 'my_app:reader-dashboard-html' %}" class="nav-item active">Dashboard</a>
+                <a href="{% url 'my_app:available-manuscripts-html' %}" class="nav-item">Available Manuscripts</a>
+                <a href="{% url 'my_app:reader-feedback-html' %}" class="nav-item">Feedback</a>
+                <a href="{% url 'my_app:reader-profile-html' %}" class="nav-item">Profile</a>
+                <a href="{% url 'my_app:reader-resource-library-html' %}" class="nav-item">Resource Library</a>
+                <a href="{% url 'my_app:beta-reader-training-html' %}" class="nav-item">Training Module</a>
+                <a href="{% url 'my_app:beta-reader-performance-metrics-html' %}" class="nav-item active">Performance Metrics</a>
+                <a href="{% url 'my_app:reader-payment-page-html' %}" class="nav-item">Payments</a>
+                <a href="{% url 'my_app:reader-settings-html' %}" class="nav-item">Settings</a>
+                <a href="{% url 'my_app:logout' %}" class="nav-item">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Beta Reader Profile</h1>
+                <p>Set up your profile to showcase your skills and attract authors.</p>
+            </div>
+
+            <!-- Profile Form -->
+            <form id="profile-form" class="form-group">
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="reader-name">Name:</label>
+                    <input type="text" id="reader-name" placeholder="Enter your name" required>
+                </div>
+
+                <!-- Bio -->
+                <div class="form-group">
+                    <label for="reader-bio">Bio:</label>
+                    <textarea id="reader-bio" placeholder="Write a brief bio about your skills and experience"></textarea>
+                </div>
+
+                 <!-- Profile Picture -->
+                 <div class="form-group">
+                    <label for="profile-pic">Upload Profile Picture:</label>
+                    <input type="file" id="profile-pic" name="profile-pic" accept="image/*">
+                    <button type="button" class="btn btn-secondary" onclick="uploadProfilePic()">Upload Picture</button>
+                </div>
+
+                <!-- Portfolio -->
+                <div class="form-group">
+                    <label for="portfolio-feedback">Portfolio Examples:</label>
+                    <textarea id="portfolio-feedback" placeholder="Provide examples of past feedback (e.g., 'Great character development!')"></textarea>
+                </div>
+
+                <!-- Desired Pay Rate -->
+                <div class="form-group">
+                    <label for="pay-rate">Desired Pay Rate ($/hour):</label>
+                    <input type="number" id="pay-rate" placeholder="Enter your pay rate" min="0">
+                </div>
+
+                <!-- Save Profile Button -->
+                <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+            </form>
+
+            <!-- Profile Display -->
+            <div id="profile-display" class="profile-display hidden">
+                <h3>Your Profile</h3>
+                <p><strong>Name:</strong> <span id="display-name"></span></p>
+                <p><strong>Bio:</strong> <span id="display-bio"></span></p>
+                <p><strong>Portfolio:</strong> <span id="display-portfolio"></span></p>
+                <p><strong>Pay Rate:</strong> $<span id="display-pay-rate"></span>/hour</p>
+                <button class="btn btn-secondary" onclick="editProfile()">Edit Profile</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

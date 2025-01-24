@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>View Project - {{ manuscript.title }}</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<style>
+			.content-header h1 {
+				font-size: 2rem;
+				color: #2c3e50;
+				text-align: center;
+			}
+
+			.dashboard-grid .card {
+				border: 1px solid #ddd;
+				border-radius: 10px;
+				background-color: #fefefe;
+				padding: 15px;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			.dashboard-grid .card:hover {
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+				transform: translateY(-5px);
+			}
+
+			.manuscript-item p {
+				margin-bottom: 10px !important;
+			}
+
+			.manuscript-item a {
+				background-color: #3498db;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				padding: 10px 20px;
+				cursor: pointer;
+				margin-bottom: 20px;
+			}
+
+			.main-content img {
+				border-radius: 5px;
+				width: 30%;
+				margin-bottom: 10px;
+			}
+
+			.main-content h1 {
+				font-size: 2rem;
+				color: #2c3e50;
+				margin-bottom: 10px;
+			}
+
+			.main-content p {
+				margin-bottom: 10px;
+				width: 30%;
+			}
+
+			.manuscript-item img {
+				border-radius: 5px;
+				width: 100%;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			{% include 'reader-sidebar.html' %}
+			<main class="main-content">
+				<h1>{{ manuscript.title }}</h1>
+				{% if manuscript.cover_art %}
+				<img
+					src="{{ manuscript.cover_art.url }}"
+					alt="{{ manuscript.title }} Cover Art"
+				/>
+				{% endif %}
+				<p><strong>Plot Summary:</strong> {{ manuscript.plot_summary }}</p>
+				<!-- Button to choose the book -->
+				<form
+					method="post"
+					action="{% url 'my_app:choose-book' manuscript.id %}"
+				>
+					{% csrf_token %}
+					<button type="submit" class="btn btn-primary">Choose Book</button>
+				</form>
+			</main>
+		</div>
+	</body>
+</html>

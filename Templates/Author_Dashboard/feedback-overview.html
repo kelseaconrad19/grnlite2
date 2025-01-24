@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Feedback Overview</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<style>
+			/* Main Content Container */
+			.main-content {
+				display: block; /* Use block to grow dynamically */
+				padding: 20px;
+				margin: 20px auto;
+				background-color: #f4f4f4 !important; /* Ensure the background is applied */
+				overflow: visible; /* Ensure no content is clipped */
+				border-radius: 10px; /* Optional border radius for aesthetics */
+				max-width: 900px;
+			}
+
+			.main-content::after {
+				content: "";
+				display: table;
+				clear: both;
+			}
+
+			/* Title and Headings */
+			.main-content h1 {
+				font-size: 2.5rem;
+				color: #2c3e50;
+				margin-bottom: 20px;
+				text-align: center;
+				border-bottom: 2px solid #ddd;
+				padding-bottom: 10px;
+			}
+
+			.main-content h2 {
+				font-size: 1.75rem;
+				color: #34495e;
+				margin-bottom: 15px;
+			}
+
+			.main-content h3 {
+				font-size: 1.5rem;
+				color: #5d6d7e;
+				margin-bottom: 10px;
+			}
+
+			/* Manuscript Items */
+			.manuscript-item {
+				margin: 15px; /* Remove unnecessary margins */
+				padding: 15px 30px;
+				border: 1px solid #ddd;
+				border-radius: 8px;
+				background-color: #f9f9f9;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+			}
+
+			.manuscript-item:hover {
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				transform: translateY(-3px);
+				transition: all 0.2s ease-in-out;
+			}
+
+			.manuscript-item img {
+				border-radius: 5px;
+				width: 100%;
+				max-width: 150px;
+				margin-bottom: 15px;
+			}
+
+			/* Plot Summary */
+			.manuscript-item p {
+				margin-bottom: 15px;
+				font-size: 1rem;
+				color: #7f8c8d;
+			}
+
+			/* Feedback List */
+			ul {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+
+			ul li {
+				background-color: #eaf2f8;
+				border: 1px solid #d6eaf8;
+				padding: 15px;
+				margin-bottom: 10px;
+				border-radius: 5px;
+				font-size: 1rem;
+				color: #2c3e50;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+			}
+
+			ul li:hover {
+				background-color: #d6eaf8;
+				border-color: #aed6f1;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+
+			ul li strong {
+				color: #34495e;
+				font-weight: bold;
+			}
+
+			ul li em {
+				display: block;
+				margin-top: 10px;
+				font-size: 0.9rem;
+				color: #7f8c8d;
+			}
+
+			/* Buttons and Links */
+			.manuscript-item a {
+				display: inline-block;
+				text-decoration: none;
+				font-size: 1rem;
+				margin-top: 10px;
+				padding: 10px 20px;
+				background-color: #3498db;
+				color: white;
+				border-radius: 5px;
+				text-align: center;
+				transition: background-color 0.2s ease-in-out;
+			}
+
+			.manuscript-item a:hover {
+				background-color: #2874a6;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			{% include 'author-sidebar.html' %}
+			<main class="main-content">
+				<h1>Your Feedback</h1>
+				{% for manuscript, feedbacks in feedback_by_manuscript.items %}
+				<div class="manuscript-item">
+					<h2>{{ manuscript.title }}</h2>
+					<img src="{{ manuscript.cover_art.url }}" alt="{{ manuscript.title }}" />
+					<p>{{ manuscript.plot_summary }}</p>
+					<h3>Feedback Responses:</h3>
+					<ul>
+						{% for feedback in feedbacks %}
+						<li>
+							Question: {{ feedback.question.question_text}}<br />
+							Answer:{{ feedback.answer_text}}<br />
+							<em>Provided by {{ feedback.reader }}</em>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endfor %}
+				</ul>
+			</main>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Beta Reader Profile</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>{{ beta_reader.profile.user.username }}'s Profile</h1>
+			<div class="card mt-4">
+				<div class="card-body">
+					<h2>About {{ beta_reader.profile.user.first_name }}</h2>
+					<p><strong>Experience:</strong> {{ beta_reader.experience }}</p>
+					<p><strong>Keywords:</strong> 
+						{{ beta_reader.keywords.all|join:", " }}
+					</p>
+					<p><strong>Rating:</strong> {{ beta_reader.rating|default:"N/A" }}</p>
+					<p><strong>Total Reviews:</strong> {{ beta_reader.total_reviews }}</p>
+					<p><strong>Joined:</strong> {{ beta_reader.created_at|date:"F j, Y" }}</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

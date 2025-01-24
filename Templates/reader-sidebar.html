@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Manuscript Submission</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<style>
+			.sidebar-header{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem;
+				margin-bottom: 0;
+			}
+
+			.sidebar-header img{
+				width: 177px;
+				height: auto;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<aside class="sidebar">
+			<div class="sidebar-header">
+				<img
+					src="{% static 'Front_End/Images/Grn_Lite_Logo.png' %}"
+					alt="Grn Lite Logo"
+				/>
+			</div>
+			<nav class="sidebar-nav">
+				<a href="{% url 'my_app:home' %}" class="nav-item">Home</a>
+				<a
+					href="{% url 'my_app:reader-dashboard-html' %}"
+					class="nav-item"
+					>Dashboard</a
+				>
+				<a href="{% url 'my_app:available-manuscripts-html' %}" class="nav-item"
+					>Available Manuscripts</a
+				>
+				<a href="{% url 'my_app:beta-reader-books' %}" class="nav-item"
+					>My Books</a
+				>
+				<a href="{% url 'my_app:logout' %}" class="nav-item">Logout</a>
+			</nav>
+		</aside>
+    <main>
+			{% block body %}
+			{% endblock %}
+		</main>
+		
+	</body>
+	</head>
+</html>

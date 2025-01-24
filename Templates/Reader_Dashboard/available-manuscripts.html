@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Available Manuscripts</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// Function to fetch and display manuscripts with filters applied
+			function applyFilters(event) {
+				if (event) {
+						event.preventDefault(); // Prevent form submission
+				}
+		
+				const keywords = document.getElementById("filter-keywords").value.trim(); // Get and trim keywords input
+				const author = document.getElementById("filter-author").value.trim(); // Get and trim author input
+		
+				const queryParams = new URLSearchParams();
+				if (keywords) queryParams.append("keywords", keywords); // Add keywords to query
+				if (author) queryParams.append("author", author); // Add author to query
+		
+				console.log(`Query Params: ${queryParams.toString()}`); // Log query string
+		
+				// Fetch filtered manuscripts
+				fetch(`/api/manuscripts/?${queryParams.toString()}`)
+						.then((response) => {
+								console.log("Response Status:", response.status);
+								if (!response.ok) {
+										throw new Error("Failed to fetch manuscripts");
+								}
+								return response.json();
+						})
+						.then((data) => {
+								console.log("Filtered Data:", data); // Log the filtered response
+		
+								const manuscriptList = document.getElementById("available-manuscripts");
+								manuscriptList.innerHTML = ""; // Clear the list
+		
+								if (data.manuscripts.length === 0) {
+										manuscriptList.innerHTML = "<p>No manuscripts match the filters.</p>";
+										return;
+								}
+		
+								data.manuscripts.forEach((manuscript) => {
+									const manuscriptDiv = document.createElement("div");
+									manuscriptDiv.classList.add("manuscript-item");
+							
+									// Check for cover art, and set a placeholder if not available
+									const coverArt = manuscript.cover_art
+											? manuscript.cover_art
+											: "/static/Front_End/Images/book-cover-placeholder.png";
+							
+									manuscriptDiv.innerHTML = `
+											<img src="${coverArt}" alt="${manuscript.title} Cover Art" style="width: 120px; height: 180px; object-fit: cover;" />
+											<h3>${manuscript.title}</h3>
+											<p><strong>Author:</strong> ${manuscript.author || "Unknown"}</p>
+											<p><strong>Keywords:</strong> ${manuscript.keywords ? manuscript.keywords.join(", ") : "None"}</p>
+											<a href="/feedback-form/${manuscript.id}/" class="btn feedback-btn">Feedback Form</a>
+									`;
+									manuscriptList.appendChild(manuscriptDiv);
+							});
+						})
+						.catch((error) => console.error("Error fetching manuscripts:", error));
+		}
+		
+		// Trigger initial fetch on page load
+		document.addEventListener("DOMContentLoaded", () => {
+			// Attach event listener to the form for Enter key and button clicks
+			const form = document.getElementById("filter-form");
+	
+			form.addEventListener("submit", (event) => {
+					event.preventDefault(); // Prevent default form submission
+					applyFilters(event); // Call the filter function
+			});
+	
+			// Optional: Handle Enter key for specific input fields
+			const keywordInput = document.getElementById("filter-keywords");
+			const authorInput = document.getElementById("filter-author");
+	
+			keywordInput.addEventListener("keydown", (event) => {
+					if (event.key === "Enter") {
+							event.preventDefault();
+							applyFilters(event);
+					}
+			});
+	
+			authorInput.addEventListener("keydown", (event) => {
+					if (event.key === "Enter") {
+							event.preventDefault();
+							applyFilters(event);
+					}
+			});
+	
+			// Initial fetch to load manuscripts
+			applyFilters();
+	});
+		</script>
+		<style>
+			.content-header h1 {
+				font-size: 2rem;
+				color: #2c3e50;
+				text-align: center;
+			}
+
+			.dashboard-grid .card {
+				border: 1px solid #ddd;
+				border-radius: 10px;
+				background-color: #fefefe;
+				padding: 15px;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			.dashboard-grid .card:hover {
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+				transform: translateY(-5px);
+			}
+
+			.manuscript-item p {
+				margin-bottom: 10px !important;
+			}
+
+			.manuscript-item button {
+				background-color: #3498db;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				padding: 10px 20px;
+				cursor: pointer;
+				margin-bottom: 20px;
+			}
+
+			#available-manuscripts {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				grid-gap: 20px;
+				justify-content: center;
+				max-width: 100%;
+				margin: 0 auto;
+			}
+
+			.manuscript-item img {
+				border-radius: 5px;
+				width: 100%;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'reader-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Available Manuscripts</h1>
+					<p>
+						Browse and select manuscripts for feedback. Use filters to refine
+						your search.
+					</p>
+				</div>
+
+				<!-- Filters Section -->
+				<div class="filters">
+					<h3>Filter Manuscripts</h3>
+					<form id="filter-form" class="form-group" onsubmit="return applyFilters(event)">
+						<div class="form-group">
+							<label for="filter-keywords">Keywords:</label>
+							<input
+								type="text"
+								id="filter-keywords"
+								name="keywords"
+								placeholder="Enter keywords"
+							/>
+						</div>
+						<div class="form-group">
+							<label for="filter-author">Author:</label>
+							<input
+								type="text"
+								id="filter-author"
+								name="author"
+								placeholder="Enter author's name"
+							/>
+						</div>
+						<button
+							type="button"
+							class="btn btn-primary"
+							onclick="applyFilters()"
+						>
+							Apply Filters
+						</button>
+					</form>
+				</div>
+
+				<!-- Available Manuscripts Section -->
+				<div class="card">
+					<h3>Available Manuscripts</h3>
+
+					<p style="margin-bottom: 30px;">View manuscripts available for review.</p>
+
+					<div id="available-manuscripts" class="manuscript-list">
+						<!-- Manuscripts will be dynamically populated here -->
+					</div>
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

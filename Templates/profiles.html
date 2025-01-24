@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Profiles</h1>
+    <ul>
+        {% for profile in profiles %}
+            <li>{{ profile.user.username }} - {{ profile.profile_image }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

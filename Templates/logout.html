@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{% load static %}
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Logout</title>
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>Logging Out...</h1>
+			<p>Redirecting you to the login page...</p>
+			<script>
+				setTimeout(() => {
+					window.location.href = "{% url 'my_app:home' %}"; // Redirect to login page after logout
+				}, 2000);
+			</script>
+		</div>
+		<!-- <script src="{% static 'redirectToAuthPage.js' %}"></script> -->
+	</body>
+</html>

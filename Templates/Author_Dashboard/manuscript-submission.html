@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Manuscript Submission</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// Existing JavaScript functions
+			function toggleNDASection() {
+				const ndaSection = document.getElementById("nda-upload-section");
+				const ndaCheckbox = document.getElementById("nda");
+				ndaSection.style.display = ndaCheckbox.checked ? "block" : "none";
+			}
+
+			function addCustomCategory() {
+				const customInput = document.getElementById("custom-feedback");
+				const categoryValue = customInput.value.trim();
+				const feedbackCategoriesDiv = document.getElementById(
+					"feedback-categories"
+				);
+
+				if (categoryValue) {
+					const newCategory = document.createElement("label");
+					newCategory.innerHTML = `<input type="checkbox" name="categories" value="${categoryValue}"> ${categoryValue}`;
+					feedbackCategoriesDiv.appendChild(newCategory);
+					customInput.value = ""; // Clear the input field
+				} else {
+					alert("Please enter a custom category!");
+				}
+			}
+
+			// New function for book review questionnaire generation
+			function generateBookReviewQuestionnaire() {
+				const questionCategories = {
+					basicQuestions: [
+						"Did the book seem too long or too short?",
+						"Did you get bored anywhere? Where?",
+						"What didn't make sense to you?",
+						"Did you like the main character?",
+						"Did you feel like you knew this place and time? Were there enough sensory details to sweep you away?",
+						"Did you like the ending?",
+						"Could you tell the characters apart?",
+						"Did the dialogue sound like it came from real people?",
+						"What parts did you like best?",
+						"What parts did you like least?",
+					],
+					overallImpressions: [
+						"What was your overall impression of the story?",
+						"What did you like about it the most?",
+						"Was there anything you didn't like about it? If so, what?",
+					],
+					plot: [
+						"Did the story grab you at the beginning?",
+						"Were there any points where you started to lose interest?",
+						"Was the story easy to follow? If not, why not?",
+						"Was there anything particular that you found confusing?",
+						"Was there anything that you had trouble believing or that seemed illogical?",
+						"Did you find any plot holes or inconsistencies?",
+						"Was the plot fulfilled in a satisfying way? In other words, was the ending satisfying?",
+					],
+					characters: [
+						"Did you find the main character engaging? If so, what was most engaging about them? If you didn't find them engaging, why not?",
+						"Was the main character relatable? What did you like about him/her? What didn't you like?",
+						"Were the protagonist's goals clear?",
+						"Which character was your favorite, and why?",
+						"Which character was your least favorite, and why?",
+						"Which character(s) do you wish was developed more?",
+						"Were you able to keep track of the characters, i.e. who was who? Were there too many? Too few?",
+					],
+					pacing: [
+						"Were there any places the story moved too quickly or too slowly?",
+						"Were there any scenes that dragged or were boring?",
+						"Were there any scenes that you wished were expanded?",
+					],
+					dialogue: [
+						"Did the dialogue sound realistic? If not, where did it sound fake?",
+						'Were the dialogue tags "invisible" or did they pull you from the story?',
+						"Could you tell who was speaking based on dialogue tags and character voice?",
+					],
+					description: [
+						"Were you able to visualize the setting for every scene? If not, where could more description be given?",
+						"Were you able to visualize every important character? If not, who could use more description?",
+					],
+					craft: [
+						"Was the narrative voice consistent throughout the course of the novel?",
+						"Were there any overused words or phrases?",
+					],
+					other: [
+						"What was your favorite scene/chapter, and why?",
+						"What was your least favorite scene/chapter, and why?",
+						'Did you feel immersed in the story? If not, where are places you couldn\'t "suspend disbelief"?',
+						"What are your thoughts about the ending?",
+						"What were the strengths of this novel? What were the weaknesses?",
+					],
+				};
+
+				const questionnaireContainer = document.getElementById(
+					"book-review-questionnaire"
+				);
+				questionnaireContainer.innerHTML = ""; // Clear previous questionnaire
+
+				// Get selected categories
+				const selectedCategories = Array.from(
+					document.querySelectorAll('input[name="review-categories"]:checked')
+				).map((checkbox) => checkbox.value);
+
+				// Generate questions for selected categories
+				selectedCategories.forEach((category) => {
+					const categoryTitle = document.createElement("h3");
+					categoryTitle.textContent = category
+						.replace(/([A-Z])/g, " $1")
+						.toLowerCase();
+					questionnaireContainer.appendChild(categoryTitle);
+
+					questionCategories[category].forEach((question) => {
+						const questionDiv = document.createElement("div");
+						questionDiv.classList.add("form-group");
+
+						const label = document.createElement("label");
+						label.textContent = question;
+
+						const textarea = document.createElement("textarea");
+						textarea.name = `review-${category}-${question.replace(
+							/\s+/g,
+							"-"
+						)}`;
+						textarea.placeholder = "Your response...";
+						textarea.rows = 3;
+
+						questionDiv.appendChild(label);
+						questionDiv.appendChild(textarea);
+						questionnaireContainer.appendChild(questionDiv);
+					});
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Manuscript Submission</h1>
+					<p>Submit and configure your manuscript for beta readers.</p>
+				</div>
+				<form class="submission-form">
+					<!-- Existing form fields remain the same -->
+					<div class="form-group">
+						<label for="manuscript-upload">Upload Manuscript:</label>
+						<input
+							type="file"
+							id="manuscript-upload"
+							name="manuscript"
+							accept=".doc,.docx,.pdf"
+						/>
+					</div>
+					<!-- ... (previous form fields) ... -->
+
+					<!-- New Book Review Questionnaire Configuration -->
+					<div class="form-group">
+						<label>Book Review Questionnaire Configuration:</label>
+						<div id="review-categories" class="checkbox-group">
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="basicQuestions"
+									checked
+								/>
+								Basic/Default Questions</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="overallImpressions"
+								/>
+								Overall Impressions</label
+							>
+							<label
+								><input type="checkbox" name="review-categories" value="plot" />
+								Plot</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="characters"
+								/>
+								Characters</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="pacing"
+								/>
+								Pacing</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="dialogue"
+								/>
+								Dialogue</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="description"
+								/>
+								Description</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="craft"
+								/>
+								Craft</label
+							>
+							<label
+								><input
+									type="checkbox"
+									name="review-categories"
+									value="other"
+								/>
+								Other</label
+							>
+						</div>
+						<button
+							type="button"
+							class="btn btn-secondary"
+							onclick="generateBookReviewQuestionnaire()"
+						>
+							Generate Questionnaire
+						</button>
+					</div>
+
+					<!-- Book Review Questionnaire Container -->
+					<div id="book-review-questionnaire" class="form-group">
+						<!-- Dynamically generated questionnaire will appear here -->
+					</div>
+
+					<!-- Submit Button -->
+					<button type="submit" class="btn btn-primary">
+						Submit Manuscript
+					</button>
+				</form>
+			</main>
+		</div>
+	</body>
+</html>

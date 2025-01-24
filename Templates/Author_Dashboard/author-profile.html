@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Author Profile</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// JavaScript to handle the form submission (saving the profile)
+			function saveProfile() {
+				const profileName = document.getElementById("author-name").value;
+				const bio = document.getElementById("author-bio").value;
+				const bookTitles = document.getElementById("book-titles").value;
+				const bookLinks = document.getElementById("book-link").value; // Added book link
+				const coverImage = document.getElementById("cover-image").files[0];
+
+				if (profileName && bio && bookTitles && bookLinks) {
+					alert("Profile Saved Successfully!");
+					// Normally, you would send this data to a server to be saved
+				} else {
+					alert("Please fill out all fields!");
+				}
+			}
+
+			// JavaScript for uploading book titles one by one
+			function addBookTitle() {
+				const bookTitle = document.getElementById("book-title").value;
+				const bookDescription =
+					document.getElementById("book-description").value;
+				const bookLink = document.getElementById("book-link").value; // Capture the book link
+				const bookCoverImage = document.getElementById("cover-image").files[0];
+
+				if (bookTitle && bookDescription && bookLink && bookCoverImage) {
+					const booksList = document.getElementById("book-list");
+					const newBook = document.createElement("div");
+					newBook.classList.add("book-item");
+					newBook.innerHTML = `
+                    <h4>${bookTitle}</h4>
+                    <p>${bookDescription}</p>
+                    <p><strong>Book Link:</strong> <a href="${bookLink}" target="_blank">${bookLink}</a></p>
+                    <img src="${URL.createObjectURL(
+											bookCoverImage
+										)}" alt="Book Cover" class="book-cover">
+                    <button type="button" class="btn btn-danger" onclick="removeBookTitle(this)">Remove</button>
+                `;
+					booksList.appendChild(newBook);
+					document.getElementById("book-title").value = "";
+					document.getElementById("book-description").value = "";
+					document.getElementById("book-link").value = ""; // Reset book link field
+					document.getElementById("cover-image").value = ""; // Reset the file input
+				} else {
+					alert("Please fill out all fields before adding a book.");
+				}
+			}
+
+			// JavaScript to remove a book title from the list
+			function removeBookTitle(button) {
+				button.parentElement.remove();
+			}
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Author Profile</h1>
+					<p>
+						Update your author profile to attract beta readers and showcase your
+						work.
+					</p>
+				</div>
+
+				<form class="profile-form">
+					<!-- Author Name -->
+					<div class="form-group">
+						<label for="author-name">Author Name:</label>
+						<input
+							type="text"
+							id="author-name"
+							name="name"
+							placeholder="Enter your name"
+							required
+						/>
+					</div>
+
+					<!-- Bio -->
+					<div class="form-group">
+						<label for="author-bio">Author Bio:</label>
+						<textarea
+							id="author-bio"
+							name="bio"
+							placeholder="Write a brief bio about yourself"
+							required
+						></textarea>
+					</div>
+
+					<!-- Book Titles and Descriptions -->
+					<div class="form-group">
+						<label for="book-titles">Past Book Title:</label>
+						<input
+							type="text"
+							id="book-title"
+							name="titles"
+							placeholder="Enter title of your past book"
+							required
+						/>
+					</div>
+
+					<div class="form-group">
+						<label for="book-description">Book Description:</label>
+						<textarea
+							id="book-description"
+							name="book-description"
+							placeholder="Enter a brief description of your book"
+						></textarea>
+					</div>
+
+					<!-- Book Link -->
+					<div class="form-group">
+						<label for="book-link">Book Link:</label>
+						<input
+							type="url"
+							id="book-link"
+							name="book-link"
+							placeholder="Enter the link to your book"
+						/>
+					</div>
+
+					<!-- Upload Book Cover Art -->
+					<div class="form-group">
+						<label for="cover-image">Upload Cover Image:</label>
+						<input type="file" id="cover-image" name="cover" accept="image/*" />
+					</div>
+
+					<!-- Button to add book title -->
+					<div class="form-group">
+						<button
+							type="button"
+							class="btn btn-secondary"
+							onclick="addBookTitle()"
+						>
+							Add Book Title
+						</button>
+					</div>
+
+					<!-- Display list of added books -->
+					<div id="book-list" class="book-list">
+						<!-- Books will appear here -->
+					</div>
+
+					<!-- Social Media Links -->
+					<div class="form-group">
+						<label for="facebook-link">Facebook Profile:</label>
+						<input
+							type="url"
+							id="facebook-link"
+							name="facebookLink"
+							placeholder="Enter your Facebook URL"
+						/>
+					</div>
+					<div class="form-group">
+						<label for="x-link">X Profile:</label>
+						<input
+							type="url"
+							id="x-link"
+							name="XLink"
+							placeholder="Enter your X URL"
+						/>
+					</div>
+					<div class="form-group">
+						<label for="linkedin-link">LinkedIn Profile:</label>
+						<input
+							type="url"
+							id="linkedin-link"
+							name="linkedinLink"
+							placeholder="Enter your LinkedIn URL"
+						/>
+					</div>
+
+					<!-- Save Profile Button -->
+					<button type="button" class="btn btn-primary" onclick="saveProfile()">
+						Save Profile
+					</button>
+				</form>
+			</main>
+		</div>
+	</body>
+</html>

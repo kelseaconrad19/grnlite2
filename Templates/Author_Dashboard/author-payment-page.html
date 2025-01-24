@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Author Payment System</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const paymentForm = document.getElementById("payment-form");
+
+				paymentForm.addEventListener("submit", (e) => {
+					e.preventDefault();
+
+					const readerId = document.getElementById("reader-id").value;
+					const paymentAmount = document
+						.getElementById("payment-amount")
+						.value.trim();
+
+					if (!readerId || !paymentAmount) {
+						alert("Please fill out all fields before submitting.");
+						return;
+					}
+
+					const paymentData = {
+						readerId,
+						paymentAmount,
+						status: "Pending",
+						transactionId: `TXN-${Math.floor(Math.random() * 1000000)}`,
+					};
+
+					// Mock API call to process payment
+					setTimeout(() => {
+						alert(
+							`Payment of $${paymentAmount} to Beta Reader (ID: ${readerId}) has been processed successfully!`
+						);
+						paymentForm.reset();
+					}, 1000);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Author Payment System</h1>
+					<p>Manage payments to beta readers for completed projects.</p>
+				</div>
+
+				<!-- Payment Form -->
+				<form id="payment-form" class="form-group">
+					<div class="form-group">
+						<label for="reader-id">Beta Reader ID:</label>
+						<input
+							type="text"
+							id="reader-id"
+							name="reader-id"
+							placeholder="Enter Beta Reader ID"
+							required
+						/>
+					</div>
+
+					<div class="form-group">
+						<label for="payment-amount">Amount to Pay:</label>
+						<input
+							type="number"
+							id="payment-amount"
+							name="payment-amount"
+							placeholder="Enter Payment Amount"
+							min="0"
+							required
+						/>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Submit Payment</button>
+				</form>
+			</main>
+		</div>
+	</body>
+</html>

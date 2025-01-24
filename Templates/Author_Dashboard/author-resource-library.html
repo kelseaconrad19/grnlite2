@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Resource Library</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// JavaScript to handle file upload
+			function uploadFile() {
+				const fileInput = document.getElementById("resource-upload");
+				const fileName = fileInput.files[0]?.name;
+				if (fileName) {
+					alert(`File "${fileName}" uploaded successfully!`);
+				} else {
+					alert("Please select a file to upload.");
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Resource Library</h1>
+					<p>
+						Upload and access valuable resources, including writing tips,
+						templates, and more.
+					</p>
+				</div>
+				<div class="resource-upload-section">
+					<form class="upload-form">
+						<!-- Resource Name -->
+						<div class="form-group">
+							<label for="resource-name">Resource Name:</label>
+							<input
+								type="text"
+								id="resource-name"
+								name="resource-name"
+								placeholder="Enter the resource name"
+								required
+							/>
+						</div>
+
+						<!-- Resource Description -->
+						<div class="form-group">
+							<label for="resource-description">Resource Description:</label>
+							<textarea
+								id="resource-description"
+								name="resource-description"
+								placeholder="Describe the resource being uploaded"
+								required
+							></textarea>
+						</div>
+
+						<!-- Resource Upload -->
+						<div class="form-group">
+							<label for="resource-upload">Upload Resource:</label>
+							<input
+								type="file"
+								id="resource-upload"
+								name="resource-file"
+								accept=".pdf,.doc,.docx,.txt,.zip"
+								required
+							/>
+						</div>
+
+						<!-- Upload Button -->
+						<button
+							type="button"
+							class="btn btn-primary"
+							onclick="uploadFile()"
+						>
+							Upload Resource
+						</button>
+					</form>
+				</div>
+
+				<div class="resource-list">
+					<h3>Available Resources:</h3>
+					<ul>
+						<li>
+							<a href="#">Writing Tips PDF</a> - A helpful guide to improve your
+							writing style.
+						</li>
+						<li>
+							<a href="#">Book Template DOCX</a> - A template to help organize
+							your book project.
+						</li>
+						<li>
+							<a href="#">Editing Checklist TXT</a> - A checklist to ensure your
+							manuscript is ready for submission.
+						</li>
+						<!-- Add more resources dynamically -->
+					</ul>
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

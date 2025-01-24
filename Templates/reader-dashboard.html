@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Reader Dashboard</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				fetch("/api/manuscripts/")
+					.then((response) => response.json())
+					.then((data) => {
+						const manuscriptList = document.getElementById(
+							"available-manuscripts",
+						);
+						data.manuscripts.forEach((manuscript) => {
+							const manuscriptDiv = document.createElement("div");
+							manuscriptDiv.classList.add("manuscript-item");
+							const coverArt = manuscript.cover_art
+                    ? manuscript.cover_art
+                    : "/static/Front_End/Images/book-cover-placeholder.png";
+							manuscriptDiv.innerHTML = `
+                    <img src="${coverArt}" alt="${manuscript.title} Cover Art" style="width: 120px; height: 180px; object-fit: cover;" />
+                    <h3>${manuscript.title}</h3>
+                    <p><strong>Author:</strong> ${manuscript.author}</p>
+                    <a href="/book-details/${
+											manuscript.id
+										}/" class="btn btn-primary">View Book Details</a>
+                `;
+							manuscriptList.appendChild(manuscriptDiv);
+						});
+					});
+			});
+			document.addEventListener("DOMContentLoaded", () => {
+				fetch("/api/reader-manuscripts/")
+					.then((response) => response.json())
+					.then((data) => {
+						const manuscriptList = document.getElementById(
+							"current-manuscripts",
+						);
+						data.manuscripts.forEach((manuscript) => {
+							const manuscriptDiv = document.createElement("div");
+							manuscriptDiv.classList.add("manuscript-item");
+							const coverArt = manuscript.cover_art
+                    ? manuscript.cover_art
+                    : "/static/Front_End/Images/book-cover-placeholder.png";
+							manuscriptDiv.innerHTML = `
+                    <img src="${coverArt}" alt="${manuscript.title} Cover Art" style="width: 120px; height: 180px; object-fit: cover;" />
+                    <h3>${manuscript.title}</h3>
+                    <p><strong>Author:</strong> ${manuscript.author}</p>
+                    <a href="/feedback-form/${
+											manuscript.id
+										}/" class="btn feedback-btn">Feedback Form</a>
+                `;
+							manuscriptList.appendChild(manuscriptDiv);
+						});
+					});
+			});
+			function chooseManuscript(manuscriptId) {
+				fetch(`/api/choose-manuscript/${manuscriptId}/`, { method: "POST" })
+					.then((response) => response.json())
+					.then((data) => {
+						alert(data.message);
+						// Optionally refresh the lists to reflect the change
+						location.reload();
+					});
+			}
+		</script>
+		<style>
+			/* General container styling */
+.dashboard-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	padding: 20px;
+}
+
+/* Card styles */
+.card {
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	text-align: center;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* Card headings and text */
+.card h3 {
+	font-size: 1.5rem;
+	color: #2c3e50;
+	margin-bottom: 10px;
+}
+
+.card p {
+	font-size: 1rem;
+	color: #7f8c8d;
+	margin-bottom: 20px;
+}
+
+/* Manuscript list inside cards */
+.manuscript-list {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+	align-items: center;
+}
+
+.content-header h1 {
+	font-size: 2.8rem !important;
+}
+
+/* Manuscript items */
+.manuscript-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 15px;
+	width: 90%; /* Limit the width of each item */
+	background: #f9f9f9;
+}
+
+.manuscript-item img {
+	width: 120px;
+	height: 180px;
+	object-fit: cover;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+.manuscript-item h3 {
+	font-size: 1.2rem;
+	color: #34495e;
+	margin-bottom: 5px;
+}
+
+.manuscript-item p {
+	font-size: 0.9rem;
+	color: #7f8c8d;
+	margin-bottom: 10px;
+}
+
+/* Buttons */
+.manuscript-item a {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	background-color: #4caf50;
+	color: #ffffff;
+	transition: all 0.3s ease;
+}
+
+.manuscript-item a.feedback-btn {
+	background-color: #3498db;
+}
+
+.manuscript-item a:hover {
+	opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.dashboard-grid {
+			grid-template-columns: 1fr; /* Stack cards on small screens */
+	}
+
+	.manuscript-item {
+			width: 100%; /* Allow items to stretch on small screens */
+	}
+}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'reader-sidebar.html' %}
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Welcome Back, {{user.first_name|default:user.username }}!</h1>
+					<p>View available manuscripts and manage feedback.</p>
+				</div>
+				<div class="dashboard-grid">
+					<!-- Available Manuscripts -->
+					<div class="card">
+						<h3>Available Manuscripts</h3>
+
+						<p>View and filter manuscripts available for review.</p>
+
+						<div id="available-manuscripts" class="manuscript-list">
+							<!-- Manuscripts will be dynamically populated here -->
+						</div>
+					</div>
+
+					<!-- Current Feedback -->
+					<div class="card">
+						<h3>Books You're Working On</h3>
+						<p>These are the manuscripts you are currently reviewing.</p>
+						<div id="current-manuscripts" class="manuscript-list">
+							<!-- Current manuscripts will be dynamically populated here -->
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+		<!-- <script src="{% static 'redirectToAuthPage.js' %}"></script> -->
+	</body>
+</html>

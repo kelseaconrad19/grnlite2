@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Feedback Summary</title>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			// JavaScript to handle feedback filtering
+			let feedbackData = [
+				{
+					chapter: "Chapter 1",
+					reader: "Reader 1",
+					type: "Plot",
+					comments: "The story arc is well-developed and engaging.",
+				},
+				{
+					chapter: "Chapter 1",
+					reader: "Reader 2",
+					type: "Characters",
+					comments: "Character development needs more depth.",
+				},
+				{
+					chapter: "Chapter 2",
+					reader: "Reader 1",
+					type: "Pacing",
+					comments: "The pacing was a bit slow in the middle.",
+				},
+				{
+					chapter: "Chapter 3",
+					reader: "Reader 3",
+					type: "Plot",
+					comments: "Great build-up, but the ending needs more clarity.",
+				},
+				{
+					chapter: "Chapter 2",
+					reader: "Reader 2",
+					type: "Characters",
+					comments: "Loved the character relationships, very relatable.",
+				},
+			];
+
+			// Function to apply filters
+			function applyFilters() {
+				const chapterFilter = document.getElementById("chapter-filter").value;
+				const readerFilter = document.getElementById("reader-filter").value;
+				const feedbackTypeFilter = document.querySelectorAll(
+					'input[name="feedback-type"]:checked'
+				);
+
+				let feedbackTypes = [];
+				feedbackTypeFilter.forEach((checkbox) => {
+					feedbackTypes.push(checkbox.value);
+				});
+
+				// Filtering the feedback based on the selected filters
+				let filteredFeedback = feedbackData.filter((item) => {
+					const matchesChapter = chapterFilter
+						? item.chapter === chapterFilter
+						: true;
+					const matchesReader = readerFilter
+						? item.reader === readerFilter
+						: true;
+					const matchesFeedbackType = feedbackTypes.length
+						? feedbackTypes.includes(item.type)
+						: true;
+
+					return matchesChapter && matchesReader && matchesFeedbackType;
+				});
+
+				// Display filtered feedback in the table
+				displayFeedback(filteredFeedback);
+			}
+
+			// Function to display feedback in the table
+			function displayFeedback(feedback) {
+				const tbody = document.getElementById("feedback-body");
+				tbody.innerHTML = ""; // Clear previous content
+
+				feedback.forEach((item) => {
+					const row = document.createElement("tr");
+					row.innerHTML = `
+                    <td>${item.chapter}</td>
+                    <td>${item.reader}</td>
+                    <td>${item.type}</td>
+                    <td>${item.comments}</td>
+                `;
+					tbody.appendChild(row);
+				});
+			}
+
+			// Initialize the page by displaying all feedback initially
+			window.onload = function () {
+				displayFeedback(feedbackData);
+			};
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'author-sidebar.html' %}
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Feedback Summary</h1>
+					<p>Review and analyze feedback received from beta readers.</p>
+				</div>
+
+				<div class="feedback-filters">
+					<!-- Chapter Filter -->
+					<div class="form-group">
+						<label for="chapter-filter">Filter by Chapter:</label>
+						<select id="chapter-filter">
+							<option value="">All Chapters</option>
+							<option value="Chapter 1">Chapter 1</option>
+							<option value="Chapter 2">Chapter 2</option>
+							<option value="Chapter 3">Chapter 3</option>
+						</select>
+					</div>
+
+					<!-- Reader Filter -->
+					<div class="form-group">
+						<label for="reader-filter">Filter by Reader:</label>
+						<select id="reader-filter">
+							<option value="">All Readers</option>
+							<option value="Reader 1">Reader 1</option>
+							<option value="Reader 2">Reader 2</option>
+							<option value="Reader 3">Reader 3</option>
+						</select>
+					</div>
+
+					<!-- Feedback Type Filter -->
+					<div class="form-group">
+						<label>Filter by Feedback Type:</label>
+						<div>
+							<label>
+								<input type="checkbox" name="feedback-type" value="Plot" />
+								Plot
+							</label>
+							<label>
+								<input
+									type="checkbox"
+									name="feedback-type"
+									value="Characters"
+								/>
+								Characters
+							</label>
+							<label>
+								<input type="checkbox" name="feedback-type" value="Pacing" />
+								Pacing
+							</label>
+							<label>
+								<input type="checkbox" name="feedback-type" value="Grammar" />
+								Grammar
+							</label>
+						</div>
+					</div>
+
+					<button
+						type="button"
+						class="btn btn-primary"
+						onclick="applyFilters()"
+					>
+						Apply Filters
+					</button>
+				</div>
+
+				<!-- Feedback Table Section -->
+				<div class="feedback-results">
+					<h3>Feedback Results</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>Chapter</th>
+								<th>Reader</th>
+								<th>Category</th>
+								<th>Feedback</th>
+							</tr>
+						</thead>
+						<tbody id="feedback-body">
+							<!-- Feedback rows will be dynamically populated -->
+						</tbody>
+					</table>
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Grn Lite - Beta Reader Feedback</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}" />
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				fetch("/api/manuscripts/")
+					.then((response) => response.json())
+					.then((manuscripts) => {
+						const manuscriptSelect = document.getElementById(
+							"manuscript-selection",
+						);
+						manuscripts.forEach((manuscript) => {
+							const option = document.createElement("option");
+							option.value = manuscript.id;
+							option.textContent = manuscript.title;
+							manuscriptSelect.appendChild(option);
+						});
+					});
+
+				const feedbackForm = document.getElementById("feedback-form");
+				feedbackForm.addEventListener("submit", (e) => {
+					e.preventDefault();
+					const formData = new FormData(feedbackForm);
+					fetch("/api/feedback/", {
+						method: "POST",
+						body: formData,
+					})
+						.then((response) => response.json())
+						.then((data) => {
+							if (data.success) {
+								alert("Feedback submitted successfully!");
+								feedbackForm.reset();
+							} else {
+								alert("Failed to submit feedback.");
+							}
+						});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			{% include 'reader-sidebar.html' %}
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="content-header">
+					<h1>Submit Feedback</h1>
+					<p>Provide your feedback for the selected manuscript.</p>
+				</div>
+				<form id="feedback-form" class="form-group">
+					<div class="form-group">
+						<label for="manuscript-selection">Select Manuscript:</label>
+						<select id="manuscript-selection" name="manuscript" required>
+							<option value="" disabled selected>Select a manuscript</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="plot-feedback">Plot Feedback:</label>
+						<textarea
+							id="plot-feedback"
+							name="plot"
+							placeholder="Provide feedback on the plot"
+						></textarea>
+					</div>
+					<div class="form-group">
+						<label for="characters-feedback">Characters Feedback:</label>
+						<textarea
+							id="characters-feedback"
+							name="characters"
+							placeholder="Provide feedback on the characters"
+						></textarea>
+					</div>
+					<div class="form-group">
+						<label for="pacing-feedback">Pacing Feedback:</label>
+						<textarea
+							id="pacing-feedback"
+							name="pacing"
+							placeholder="Provide feedback on the pacing"
+						></textarea>
+					</div>
+					<div class="form-group">
+						<label for="worldbuilding-feedback">Worldbuilding Feedback:</label>
+						<textarea
+							id="worldbuilding-feedback"
+							name="worldbuilding"
+							placeholder="Provide feedback on worldbuilding"
+						></textarea>
+					</div>
+					<div class="form-group">
+						<label for="additional-comments">Additional Comments:</label>
+						<textarea
+							id="additional-comments"
+							name="comments"
+							placeholder="Share any additional thoughts or suggestions"
+						></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Submit Feedback</button>
+				</form>
+			</main>
+		</div>
+	</body>
+</html>

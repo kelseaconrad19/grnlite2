@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grn Lite - Beta Reader Training</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'Front_End/CSS/styles.css' %}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentStep = 0;
+
+            const trainingSteps = [
+                {
+                    title: "Welcome to Beta Reader Training",
+                    content: "Learn how to provide constructive feedback and refine your skills as a beta reader.",
+                },
+                {
+                    title: "Step 1: Focus on Plot",
+                    content: "Identify areas where the plot is engaging or where it might need improvement. Example: 'The climax was exciting but felt rushed.'",
+                },
+                {
+                    title: "Step 2: Evaluate Characters",
+                    content: "Consider character development and relationships. Example: 'The protagonist's motivation could be clearer in Chapter 3.'",
+                },
+                {
+                    title: "Step 3: Assess Pacing",
+                    content: "Look for areas where the story moves too fast or too slow. Example: 'The description in Chapter 2 slowed the narrative.'",
+                },
+                {
+                    title: "Step 4: Submit Feedback",
+                    content: "Practice giving feedback in a simulated exercise below.",
+                },
+            ];
+
+            const stepTitle = document.getElementById("step-title");
+            const stepContent = document.getElementById("step-content");
+            const prevButton = document.getElementById("prev-button");
+            const nextButton = document.getElementById("next-button");
+            const feedbackForm = document.getElementById("feedback-form");
+
+            const updateStep = () => {
+                const step = trainingSteps[currentStep];
+                stepTitle.textContent = step.title;
+                stepContent.textContent = step.content;
+                feedbackForm.style.display = currentStep === trainingSteps.length - 1 ? "block" : "none";
+
+                prevButton.disabled = currentStep === 0;
+                nextButton.disabled = currentStep === trainingSteps.length - 1;
+            };
+
+            prevButton.addEventListener("click", () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateStep();
+                }
+            });
+
+            nextButton.addEventListener("click", () => {
+                if (currentStep < trainingSteps.length - 1) {
+                    currentStep++;
+                    updateStep();
+                }
+            });
+
+            // Initialize the first step
+            updateStep();
+        });
+
+        function submitFeedback() {
+            const feedback = document.getElementById("feedback-input").value.trim();
+            if (feedback) {
+                alert("Feedback submitted! Great job practicing your beta reader skills.");
+                document.getElementById("feedback-input").value = ""; // Clear the input field
+            } else {
+                alert("Please enter your feedback before submitting.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="{% static 'Front_End/Images/Grn_Lite_Logo.png' %}" alt="Grn Lite Logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'my_app:home' %}" class="nav-item">Home</a>
+                <a href="{% url 'my_app:reader-dashboard-html' %}" class="nav-item active">Dashboard</a>
+                <a href="{% url 'my_app:available-manuscripts-html' %}" class="nav-item">Available Manuscripts</a>
+                <a href="{% url 'my_app:reader-feedback-html' %}" class="nav-item">Feedback</a>
+                <a href="{% url 'my_app:reader-profile-html' %}" class="nav-item">Profile</a>
+                <a href="{% url 'my_app:reader-resource-library-html' %}" class="nav-item">Resource Library</a>
+                <a href="{% url 'my_app:beta-reader-training-html' %}" class="nav-item">Training Module</a>
+                <a href="{% url 'my_app:beta-reader-performance-metrics-html' %}" class="nav-item active">Performance Metrics</a>
+                <a href="{% url 'my_app:reader-payment-page-html' %}" class="nav-item">Payments</a>
+                <a href="{% url 'my_app:reader-settings-html' %}" class="nav-item">Settings</a>
+                <a href="{% url 'my_app:logout' %}" class="nav-item">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Beta Reader Training Module</h1>
+                <p>Enhance your beta reading skills with this interactive guide.</p>
+            </div>
+            <div class="training-module">
+                <h2 id="step-title"></h2>
+                <p id="step-content"></p>
+
+                <div class="training-controls">
+                    <button id="prev-button" class="btn btn-secondary">Previous</button>
+                    <button id="next-button" class="btn btn-primary">Next</button>
+                </div>
+
+                <!-- Feedback Simulation Form -->
+                <form id="feedback-form" class="form-group" style="display: none;">
+                    <h3>Practice Feedback</h3>
+                    <label for="feedback-input">Provide constructive feedback based on the simulated content:</label>
+                    <textarea id="feedback-input" name="feedback" placeholder="Enter your feedback here..." required></textarea>
+                    <button type="button" class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
